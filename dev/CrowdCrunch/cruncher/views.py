@@ -38,20 +38,25 @@ class LandingView(TemplateView):
 				return redirect("/?error")
 		else:
 			email = request.POST['email']
-			phone = request.POST['phone']
-			phone_verify = request.POST['phone_verify']
+			phone = u''.join(c for c in request.POST['phone'] if '0' <= c <= '9')
+			phone_verify = u''.join(c for c in request.POST['phone_verify'] if '0' <= c <= '9')
 			password = request.POST['password']
-			if(email == u'' or phone == u'' or phone_verify == u'' or phone != phone_verify or password == u'' or not phone.is_digit()):
+			if(email == u'' or phone == u'' or phone_verify == u'' or phone != phone_verify or password == u''):
 				return redirect("/?no-fill")
 			user = User.objects.create_user(email, email, password)
 			user.save()
 
-			profile = UserProfile.objects.new()
+			profile = UserProfile()
 			profile.phone_number = phone
-			profile.user = user
+			profile.status = 2
+			profile.credits = 5
+			profile.current_job_id = 0
+			profile.user_id = user
 			profile.save()
 
+			user = authenticate(username=email, password=password)
 			login(request, user)
+			
 			return redirect("/dashboard?new")
 
 class UserCreationView(TemplateView):
