@@ -7,6 +7,21 @@
 	z-index:-1;
 }
 
+.account-info {
+	background: #eee;
+	padding: 20px;
+	border-radius: 10px;
+}
+
+.account-info h5 {
+	font-size: 1.3em;
+	margin: 0;
+}
+
+.account-info h3 {
+	margin-top: 0;
+}
+
 #bg img {
 	bottom:0;
 	left:0;
@@ -29,4 +44,16 @@
 .body {
 	padding-top: 80px;
 	min-height: 1000px;
+}
+
+.nav-list strong {
+	color: #444 !important;
+}
+
+.job {
+
+}
+
+.job h2 {
+	margin:0;
 }
