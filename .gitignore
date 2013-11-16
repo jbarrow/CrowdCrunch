@@ -2,3 +2,7 @@
 *.pot
 *.pyc
 local_settings.py
+
+dev/bin
+dev/include
+dev/lib
