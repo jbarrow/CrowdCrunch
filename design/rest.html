@@ -38,8 +38,8 @@
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <b class="caret"></b></a>
         <ul class="dropdown-menu">
-          <li><a href="#">Add Credits</a></li>
-          <li><a href="#">Create a Job</a></li>
+          <li><a href="#" data-toggle="modal" data-target="#addCredits">Add Credits</a></li>
+          <li><a href="#" data-toggle="modal" data-target="#createJob">Create a Job</a></li>
           <li><a href="#">Update Profile</a></li>
           <li class="divider"></li>
           <li><a href="#">Sign out</a></li>
@@ -202,6 +202,150 @@
       </div>
     </div>
   </div>
+  <div class="body">
+    <div class="container">
+      <div class="col-md-4">
+        <ul class="nav nav-list nav-list-vivid">
+            <li class="nav-header">My Account - <strong>4.6 Stars</strong></li>
+            <li>
+              <a href="#fakelink">
+                Dashboard
+              </a>
+            </li>
+            <li>
+              <a href="#fakelink">
+                Current Job
+                <span class="badge pull-right">1</span>
+              </a>
+            </li>
+            <li>
+              <a href="#fakelink">
+                Start a Job
+              </a>
+            </li>
+            <li>
+              <a href="#fakelink">
+                Add Credits
+              </a>
+            </li>
+            <li class="active">
+              <a href="#fakelink">
+                My Profile
+              </a>
+            </li>
+            <li>
+              <a href="#fakelink">
+                Sign Out
+              </a>
+            </li>
+          </ul>
+          <h4>Associated Coinbase</h4>
+          <input type="text" class="form-control" value="Bitcoin Wallet Address" />
+      </div>
+      <div class="col-md-8">
+         <h3>Update My Account</h3>
+         <div class="dialog dialog-danger">
+  You still have to <a href="#" data-toggle="modal" data-target="#verifyPhone">verify your phone number</a>
+</div>
+
+      <form role="form">
+        <div class="form-group">
+          <label for="inputUsernameEmail">Email</label>
+          <input type="text" class="form-control" id="inputUsernameEmail">
+        </div>
+        <div class="form-group">
+          <label for="inputUsernameEmail">Phone Number</label>
+          <input type="text" class="form-control" id="inputUsernameEmail">
+        </div>
+        <div class="form-group">
+          <label for="inputPassword">New Password</label>
+          <input type="password" class="form-control" id="inputPassword">
+        </div>
+        <div class="form-group">
+          <label for="inputPassword">Old Password</label>
+          <input type="password" class="form-control" id="inputPassword">
+        </div>
+        <button type="submit" class="btn btn btn-primary">
+          Log In
+        </button>
+      </form>
+      </div>
+    </div>
+  </div>
+
+<div class="modal" id="verifyPhone">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close fui-cross" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">Verify your Phone</h3>
+      </div>
+
+      <div class="modal-body">
+        <form role="form">
+          <div class="form-group">
+            <label for="inputUsernameEmail">Enter the code texted to your mobile phone: </label>
+            <input type="text" class="form-control" id="inputUsernameEmail">
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <a href="#" class="btn btn-default btn-wide" data-dismiss="modal" aria-hidden="true">Cancel</a>
+        <a href="#" class="btn btn-primary btn-wide">Okay</a>
+      </div>
+    </div>
+  </div>  
+</div>
+
+<div class="modal" id="addCredits">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close fui-cross" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">Add Credits</h3>
+      </div>
+
+      <div class="modal-body">
+        <p>Click <strong>"Add Credits"</strong> below to add 5 credits to your account, charged from CoinBase.</p>
+      </div>
+
+      <div class="modal-footer">
+        <a href="#" class="btn btn-default btn-wide" data-dismiss="modal" aria-hidden="true">Cancel</a>
+        <a href="#" class="btn btn-primary btn-wide">Add Credits</a>
+      </div>
+    </div>
+  </div>  
+</div>
+
+<div class="modal" id="createJob">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close fui-cross" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">Create a Job</h3>
+      </div>
+
+      <div class="modal-body">
+        <form role="form">
+          <div class="form-group">
+            <label for="body">Simply add a description of the job you would like done:</label>
+            <textarea class="form-control" id="body"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="inputUsernameEmail">Budget:</label>
+            <input type="text" class="form-control" id="inputUsernameEmail">
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <a href="#" class="btn btn-default btn-wide" data-dismiss="modal" aria-hidden="true">Cancel</a>
+        <a href="#" class="btn btn-primary btn-wide">Create Job</a>
+      </div>
+    </div>
+  </div>  
+</div>
     <script src="js/jquery-1.8.3.min.js"></script>
     <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="js/jquery.ui.touch-punch.min.js"></script>
