@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block bg %}
+<div id="bg">
+	<img src="/static/images/background.jpg" alt="">
+</div>
+{% endblock%}
+
+{% block content %}
+<div class="body">
+	<div class="container">
+		<div class="col-md-6">
+			<div class="main">
+				<h3>Sign Up</h3>
+				<form role="form" method="post">
+					{% csrf_token %}
+					{% if fill_error %}
+						<p style="color: red; font-weight: bold;">Please fill in the form correctly.</p>
+					{% endif %}
+					<div class="form-group">
+						<label for="inputUsernameEmail">Email</label>
+						<input type="text" class="form-control" id="inputUsernameEmail" name="email">
+					</div>
+					<div class="form-group">
+						<label for="inputUsernamePhone">Phone Number <span style="font-size: 12px">Numbers only please.</span></label>
+						<input type="text" class="form-control" id="inputUsernamePhone" name="phone">
+					</div>
+					<div class="form-group">
+						<label for="inputUsernamePhoneVerify">Verify Phone Number</label>
+						<input type="text" class="form-control" id="inputUsernamePhoneVerify" name="phone_verify">
+					</div>
+					<div class="form-group">
+						<label for="inputPassword">Password</label>
+						<input type="password" class="form-control" id="inputPassword" name="password">
+					</div>
+					<input type="hidden" name="login" value="0"/>
+					<button type="submit" class="btn btn btn-primary">
+						Sign Up
+					</button>
+				</form>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="main">
+				<h3>Sign In</h3>
+				<form role="form" method="post">
+					{% csrf_token %}
+					{% if error %}
+						<p style="color: red; font-weight: bold;">Username or password is incorrect.</p>
+					{% endif %}
+					{% if disabled %}
+						<p style="color: red; font-weight: bold;">Your account has been disabled.</p>
+					{% endif %}
+					<div class="form-group">
+						<label for="inputUsernameEmail">Email</label>
+						<input type="text" class="form-control" id="inputUsernameEmail" name="username">
+					</div>
+					<div class="form-group">
+						<a class="pull-right" href="#">Forgot password?</a>
+						<label for="inputPassword">Password</label>
+						<input type="password" class="form-control" id="inputPassword" name="password">
+					</div>
+					<input type="hidden" name="login" value="1"/>
+					<button type="submit" class="btn btn btn-primary">
+						Log In
+					</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
