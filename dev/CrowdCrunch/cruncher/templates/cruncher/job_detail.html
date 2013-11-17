@@ -15,18 +15,8 @@
 	<a href="#" class="btn btn-link">Reject</a>
 {% endif %}
 <br />
-<h4 style="text-align: right">Attachments</h4>
-<ul class="nav nav-list">
-	{% for f in object.file_set.all %}
-	<li>
-		<a href="{{ f.url }}">{{ f.url }}</a>
-	</li>
-	{% empty %}
-	<li>No attachments on this job.</li>
-	{% endfor %}
-</ul>
-<br />
 <h4 style="text-align: right">Communications</h4>
+<p>Be sure to provide all necessary information over communication, but <strong>only the necessary information</strong> -- don't go giving out credit card details!
 <table class="table table-striped table-hover">
 		<thead>
 			<tr>
