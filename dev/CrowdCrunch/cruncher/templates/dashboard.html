@@ -35,6 +35,13 @@
 								My Profile
 							</a>
 						</li>
+						{% if request.user.is_staff %}
+						<li>
+							<a href="/profile/credit">
+								Add Staff Credit
+							</a>
+						</li>
+						{% endif %}
 						<li>
 							<a href="/logout">
 								Sign Out
@@ -79,7 +86,7 @@
 				<div class="col-md-6">
 					<div class="account-info">
 						<h3>{{ credits }} Credits</h3>
-						<h5>Left on this account</h5>
+						<h5>Left on this account </h5>
 					</div>
 				</div>
 				<div class="col-md-12">
