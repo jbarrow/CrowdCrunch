@@ -15,8 +15,8 @@ from cruncher.jobs.txtl import *
 from cruncher.jobs.names import all_names, num_names
 from cruncher.queuer.bridge import *
 
-p = re.compile("(/d) stars?")
-b = re.compile("budget (/d+) credits")
+p = re.compile(".*?(\d) stars?")
+b = re.compile(".*?budget (\d+) credits?")
 
 def get_random_name(user):
 	while(True):
