@@ -15,6 +15,8 @@ from cruncher.jobs.txtl import *
 from cruncher.jobs.names import all_names, num_names
 from cruncher.queuer.bridge import *
 
+p = re.compile("(/d) stars?")
+
 def get_random_name(user):
 	while(True):
 		n = random_name()
@@ -50,7 +52,7 @@ class TwilioView(View):
 
 		# Is the user responding to a work request?
 		if user_has_last_work_request(user):
-			if message == "help":
+			if message == "learn":
 				# Respond with specific help
 				return HttpResponse(respond_with_message("Reply 'offline' to go offline, 'accept' to accept job, or 'decline' to decline job."))
 
@@ -84,7 +86,7 @@ class TwilioView(View):
 			return HttpResponse(respond_with_message("I didn't understand. Please reply with 'accept', 'decline' or 'offline'."))
 
 		# Handle help
-		if message == "help":
+		if message == "learn":
 			return HttpResponse(respond_with_message("Text a request and we will forward it to your personal assistant."))
 
 		body = request.POST["Body"]
@@ -117,8 +119,16 @@ class TwilioView(View):
 
 				return HttpResponse(respond_with_message("We have ended your involvement with that job. Expect another job coming soon."))
 
+			# Frank accept 5 stars
 			if "accept" in message.lower() and j[0].owner == user and j[0].status == 2:
 				j[0].status = 3
+
+				m = p.match(message.lower())
+				rating = 0
+				if m != None:
+					rating = int(m.group(1))
+				j[0].rating = rating
+
 				j[0].save()
 				j[0].Complete()
 
