@@ -5,6 +5,7 @@ admin.autodiscover()
 
 from cruncher.views import *
 from cruncher.jobs.views import TwilioView
+from cruncher.payment.payment import CoinBaseView
 from django.views.generic import TemplateView
 
 from django.contrib.auth.decorators import login_required
@@ -26,6 +27,8 @@ urlpatterns = patterns('',
     url(r'^profile/current$', login_required(CurrentJobView.as_view())),
     
     url(r'^receive-message/$', TwilioView.as_view()),
+
+    url(r'^process-bitcoin/$', CoinBaseView.as_view()),
 
     url(r'^admin/', include(admin.site.urls)),
 )
