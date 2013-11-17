@@ -27,7 +27,7 @@ def WorkerJobRunner(job):
 			# print inst
 			time.sleep(1)
 
-	QueueTextToUser(user.phone, "You have been assigned the job (reply with accept, decline, or stop): " + job.description)
+	QueueTextToUser(user.phone_number, "You have been assigned the job (reply with accept, decline, or stop): " + job.description)
 
 
 def QueueJob(job):
