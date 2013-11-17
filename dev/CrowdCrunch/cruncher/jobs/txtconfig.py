@@ -48,6 +48,7 @@ def user_finished_work(user):
 	conn.delete(get_has_work_key(user))
 
 ## JOB REQUEST
+
 def get_last_work_request_key(user_id):
 	return "cc:" + str(user_id) + ":__last_work_request"
 
@@ -55,10 +56,10 @@ def user_has_last_work_request(user):
 	return (conn.get(get_last_work_request_key(user.id)) != None)
 
 def get_last_work_request(user):
-	return conn.get(get_last_work_request_key)
+	return conn.get(get_last_work_request_key(user.id))
 
 def set_job_request_for_user(user, job_id):
-	conn.set(get_last_work_request_key(user), job_id)
+	conn.set(get_last_work_request_key(user.id), job_id)
 
 def clear_job_request_for_user(user):
-	conn.delete(get_last_work_request_key(user))
+	conn.delete(get_last_work_request_key(user.id))

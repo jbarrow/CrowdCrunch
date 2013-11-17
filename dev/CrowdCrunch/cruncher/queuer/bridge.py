@@ -27,6 +27,5 @@ def WorkerJobRunner(job):
 	set_job_request_for_user(user, job.id)
 	QueueTextToUser(user.phone_number, "You have been assigned the job (reply with accept, decline, or stop): " + job.description)
 
-
 def QueueJob(job):
 	q.enqueue(WorkerJobRunner, job)
