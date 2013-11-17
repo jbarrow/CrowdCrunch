@@ -8,6 +8,8 @@ import random
 from django.http import HttpResponse
 from cruncher.models import *
 
+from cruncher.payment.payment import make_transaction
+
 from cruncher.jobs.txtconfig import *
 from cruncher.jobs.txtl import *
 from cruncher.jobs.names import all_names, num_names
@@ -94,6 +96,16 @@ class TwilioView(View):
 			print j
 
 			message = body[len(name):]
+
+			if "pay" in message.lower():
+				data = re.split("\W+", message.lower())
+				address = data[data.index("pay") + 1]
+				amount = data[data.index("pay") + 2]
+				if float(amount) <= (2/460) * j[0].budget:
+					make_transaction(address, amount)
+					return HttpResponse(respond_with_message("The payment has been successfully made."))
+				else:
+					return HttpResponse(respond_with_message("That amount is not budgeted for this job. Why don't you contact the owner?"))
 
 			if "decline" in message.lower():
 				user.StopWorking()
