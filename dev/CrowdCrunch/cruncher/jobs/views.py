@@ -43,6 +43,7 @@ class TwilioView(View):
 			if(user.status == 3):
 				return HttpResponse(respond_with_message("Finish one thing before you start another."))
 			else:
+				user.MarkAvailable()
 				return HttpResponse(respond_with_message("You've been marked as available! Expect to receive a job soon."))
 
 		# Is the user responding to a work request?
