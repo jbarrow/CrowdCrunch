@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 # Create your models here.
 
@@ -176,7 +177,11 @@ class UserProfile(models.Model):
 		return True
 
 	def StarValue(self):
-		return 0.0
+		j = self.worked_jobs.filter(Q(status=3) | Q(status=4))
+		total = 0.0
+		for x in j:
+			total += x.rating
+		return total/len(j) if len(j) > 0 else 0.0
 
 	def BudgetEligible(self):
 		return (self.worked_jobs.filter(rating__gte=3).count() >= 5)
