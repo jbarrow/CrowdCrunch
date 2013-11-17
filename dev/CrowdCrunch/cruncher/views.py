@@ -1,9 +1,65 @@
-from django.views.generic import TemplateView
-from django.contrib.auth.models import User
+from django.views.generic import TemplateView, View
 from django.shortcuts import redirect
+
+from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
+
+from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
+
 from cruncher.models import *
+from django.db.models import Q
+
+from django.http import HttpResponse
+
+class CreateJobView(View):
+	@method_decorator(csrf_protect)
+	def post(self, request, **kwargs):
+		description = request.POST['description']
+		budget = request.POST['budget'] if request.POST["budget"] != "" else 0.0
+		print budget
+		result = Job.Create(description, budget, self.request.user)
+		if(result):
+			return redirect("/dashboard?created")
+		else:
+			return redirect("/dashboard?create-error")
+
+class CreditAccountView(View):
+	@method_decorator(csrf_protect)
+	def post(self, request, **kwargs):
+		p = UserProfile.Get(request.user)
+
+		if(p):
+			p.AddCredits(5)
+			return redirect("/dashboard")
+		else:
+			return HttpResponse(status=500)
+
+class LoggedInView(TemplateView):
+	def get_context_data(self, **kwargs):
+		context = super(LoggedInView, self).get_context_data(**kwargs)
+
+		if self.request.user.is_authenticated():
+			context['logged_in'] = True
+
+		return context
+
+class DashboardView(LoggedInView):
+	template_name="dashboard.html" 
+
+	def get_context_data(self, **kwargs):
+		context = super(DashboardView, self).get_context_data(**kwargs)
+		user = self.request.user
+		profile = UserProfile.objects.get(user_id=user)
+		context['total_jobs'] = Job.objects.filter(owner=user).order_by("-created")
+		context['working_count'] = Job.objects.filter(Q(status=0) | Q(status=1), owner=user).count()
+		context['working_job'] = profile.current_job if profile.current_job_id != 0 else  False
+		context['credits'] = profile.credits
+		context['stars'] = profile.StarValue()
+		context['new'] = ("new" in self.request.GET)
+		context['created'] = ("created" in self.request.GET)
+		context['create_error'] = ("create-error" in self.request.GET)
+		return context
 
 class LandingView(TemplateView):
 	template_name="home.html"
@@ -22,7 +78,7 @@ class LandingView(TemplateView):
 		context['fill_error'] = ("no-fill" in self.request.GET)
 		return context
 
-	# @csrf_protect
+	@method_decorator(csrf_protect)
 	def post(self, request, **kwargs):
 		if request.POST['login'] == "1":
 			username = request.POST['username']
@@ -56,8 +112,5 @@ class LandingView(TemplateView):
 
 			user = authenticate(username=email, password=password)
 			login(request, user)
-			
-			return redirect("/dashboard?new")
 
-class UserCreationView(TemplateView):
-	pass
+			return redirect("/dashboard?new")

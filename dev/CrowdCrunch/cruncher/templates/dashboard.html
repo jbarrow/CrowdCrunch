@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="body">
+		<div class="container">
+			<div class="col-md-4">
+				<ul class="nav nav-list nav-list-vivid">
+						<li class="nav-header">My Account - <strong>{{ stars }} Stars</strong></li>
+						<li class="active">
+							<a href="/dashboard">
+								Dashboard
+							</a>
+						</li>
+						<li>
+							<a href="/current">
+								Current Job
+								<span class="badge pull-right">1</span>
+							</a>
+						</li>
+						<li>
+							<a data-toggle="modal" data-target="#createJob">
+								Start a Job
+							</a>
+						</li>
+						<li>
+							<a data-toggle="modal" data-target="#addCredits">
+								Add Credits
+							</a>
+						</li>
+						<li>
+							<a href="/profile">
+								My Profile
+							</a>
+						</li>
+						<li>
+							<a href="/logout">
+								Sign Out
+							</a>
+						</li>
+					</ul>
+			</div>
+			<div class="col-md-8">
+				{% if new %}
+					<p>Looks like you are new around here! As you can see, we went ahead and added 5 credits to your account. Each credit counts towards 1 request for your virtual assistant.</p>
+				{% endif %}
+				{% if created %}
+					<p>Your job has been created. Look for it in the list below!</p>
+				{% endif %}
+				{% if create_error %}
+					<p>Your job has been created. Look for it in the list below!</p>
+				{% endif %}
+				<div class="col-md-6">
+					<div class="account-info">
+						<h3>{{ working_count }} Jobs</h3>
+						<h5>Currently Active</h5>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="account-info">
+						<h3>{{ credits }} Credits</h3>
+						<h5>Left on this account</h5>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<br /><br />
+					<br /><br />
+					<h3>Processed Jobs</h3>
+					<ul class="nav nav-list">
+						{% for j in total_jobs %}
+						<li class="{% if j.status == 0 or j.status == 1 %}active{% endif %}">
+							<a href="#">
+								{% if j.status == 0 or j.status == 1 %}Processing...{% endif %} - {{ j.created|date:"n/d"}} at {{ j.created|date:"h:i a" }} - {{ j.description }}...
+							</a>
+						</li>
+						{% empty %}
+						<p>You should click "Start a Job" to your left to begin your first Job!</p>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal" id="verifyPhone">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close fui-cross" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">Verify your Phone</h3>
+				</div>
+
+				<div class="modal-body">
+					<form role="form">
+						<div class="form-group">
+							<label for="inputUsernameEmail">Enter the code texted to your mobile phone: </label>
+							<input type="text" class="form-control" id="inputUsernameEmail">
+						</div>
+					</form>
+				</div>
+
+				<div class="modal-footer">
+					<a href="#" class="btn btn-default btn-wide" data-dismiss="modal" aria-hidden="true">Cancel</a>
+					<a href="#" class="btn btn-primary btn-wide">Okay</a>
+				</div>
+			</div>
+		</div>  
+	</div>
+
+	<div class="modal" id="addCredits">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close fui-cross" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">Add Credits</h3>
+				</div>
+
+				<div class="modal-body">
+					<p>Click <strong>"Add Credits"</strong> below to add 5 credits to your account, charged from CoinBase.</p>
+				</div>
+
+				<form action="/profile/credit/" method="post">
+					{% csrf_token %}
+					<div class="modal-footer">
+						<a href="#" class="btn btn-default btn-wide" data-dismiss="modal" aria-hidden="true">Cancel</a>
+						<button type="submit" class="btn btn-primary btn-wide">Add Credits</button>
+					</div>
+				</form>
+			</div>
+		</div>  
+	</div>
+
+	<div class="modal" id="createJob">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close fui-cross" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">Create a Job</h3>
+				</div>
+
+				<form role="form" action="/jobs/new/" method="post">
+					<div class="modal-body">
+							{% csrf_token %}
+							<div class="form-group">
+								<label for="body">Simply add a description of the job you would like done:</label>
+								<textarea class="form-control" id="body" placeholder="Make sure to add a budget if the task will require money." name="description"></textarea>
+							</div>
+							<div class="form-group">
+								<label for="inputUsernameEmail">Budget:</label>
+								<input type="text" class="form-control" id="inputUsernameEmail" placeholder="$0.00" name="budget">
+							</div>
+					</div>
+
+					<div class="modal-footer">
+						<a href="#" class="btn btn-default btn-wide" data-dismiss="modal" aria-hidden="true">Cancel</a>
+						<button type="submit" class="btn btn-primary btn-wide">Create Job</a>
+					</div>
+				</form>
+			</div>
+		</div>  
+	</div>
+{% endblock %}

@@ -15,6 +15,45 @@ class Job(models.Model):
 	status = models.IntegerField(choices = STATUS_CHOICES)
 	rating = models.IntegerField(default=0)
 	cost = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+	created = models.DateTimeField(auto_now_add=True, null=True)
+	owner = models.ForeignKey(User, related_name="owned_jobs")
+	worker = models.ForeignKey(User, related_name="worked_jobs")
+
+	@classmethod
+	def Create(cls, description, budget, user):
+
+		p = UserProfile.Get(user)
+
+		if(p):
+			ok = p.RemoveCredits(1)
+			if(not ok):
+				return False
+		else:
+			return False
+
+		j = Job()
+		j.description = description
+		j.status = 0
+		j.cost = budget
+		j.owner = user
+		j.worker_id = 0
+		
+		try:
+			j.save()
+		except:
+			p.AddCredits(1)
+			return False
+		# Start Working Here..
+		return True
+
+	@classmethod
+	def CreateWithPhone(cls, description, budget, phone):
+		u = False
+		try:
+			u = UserProfile.objects.get(phone_number=string)
+		except:
+			return False
+		return Job.Create(description, budget, u)
 
 class Payment(models.Model):
 	number = models.CharField(max_length=255)
@@ -37,3 +76,26 @@ class UserProfile(models.Model):
 	current_job = models.ForeignKey(Job) 
 	user_id = models.ForeignKey(User)
 	phone_number = models.CharField(max_length=255)
+
+	@classmethod
+	def Get(cls, user):
+		o = False
+		try:
+			o = UserProfile.objects.get(user_id=user)
+		except:
+			return False
+		return o
+
+	def AddCredits(self, credit_amount):
+		self.credits += credit_amount
+		self.save()
+
+	def RemoveCredits(self, credit_amount):
+		if(self.credits < credit_amount):
+			return False
+		self.credits -= credit_amount
+		self.save()
+		return True
+
+	def StarValue(self):
+		return 0.0

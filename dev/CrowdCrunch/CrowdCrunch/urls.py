@@ -6,6 +6,8 @@ admin.autodiscover()
 from cruncher.views import *
 from django.views.generic import TemplateView
 
+from django.contrib.auth.decorators import login_required
+
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'CrowdCrunch.views.home', name='home'),
@@ -13,7 +15,10 @@ urlpatterns = patterns('',
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/?logged_out=true'}),
 
     url(r'^$', LandingView.as_view()),
-    url(r'^/users/new', TemplateView.as_view(template_name="home.html")),
+    url(r'^dashboard$', login_required(DashboardView.as_view())),
+    url(r'^jobs/new/$', login_required(CreateJobView.as_view())),
+
+    url(r'^profile/credit/$', login_required(CreditAccountView.as_view())),
 
     url(r'^admin/', include(admin.site.urls)),
 )

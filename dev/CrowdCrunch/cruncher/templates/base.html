@@ -30,15 +30,15 @@
 				<a class="navbar-brand" href="/">CrowdCrunch</a>
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
-			{% if request.user.is_authenticated %}
+			{% if logged_in %}
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">				
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="/dashboard">Dashboard</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="/add_credits">Add Credits</a></li>
-							<li><a href="/create_job">Create a Job</a></li>
+							<li><a href="#" data-toggle="modal" data-target="#addCredits">Add Credits</a></li>
+							<li><a href="#" data-toggle="modal" data-target="#createJob">Create a Job</a></li>
 							<li><a href="/profile">Update Profile</a></li>
 							<li class="divider"></li>
 							<li><a href="/logout">Sign out</a></li>
