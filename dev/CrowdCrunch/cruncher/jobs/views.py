@@ -87,8 +87,6 @@ class TwilioView(View):
 		body = request.POST["Body"]
 		name = re.split("\W+", body.lower())[0]
 
-		print user_has_name(user, name)
-		print name
 		if user_has_name(user, name):
 			# They are replying to a job... Let's log that.
 			j = get_job_info(user, name)

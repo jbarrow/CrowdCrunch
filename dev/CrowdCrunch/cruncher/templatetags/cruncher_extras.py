@@ -10,3 +10,8 @@ def active(request, match):
 @register.filter
 def has_work(user):
 	return UserProfile.Get(user).HasWork()
+	
+@register.filter
+def has_work(user):
+	return UserProfile.Get(user).HasWork()
+
