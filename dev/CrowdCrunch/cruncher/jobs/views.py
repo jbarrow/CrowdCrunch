@@ -60,10 +60,16 @@ class TwilioView(View):
 			if message == "accept":
 				# Accept the job
 				j = get_last_work_request(user)
+
 				clear_job_request_for_user(user)
 				n = get_random_name(user)
 				set_job_for_user(user, n.lower(), j, JOB_WORKER)
 				user.StartWorking()
+
+				j = Job.objects.get(id = j)
+				j.status = 1
+				j.save()
+
 				return HttpResponse(respond_with_message("This job's name is " + n + " please start future messages to it with the name. Text '" + n + ", I'm finished' when you are done."))
 
 			if message == "quit":
@@ -81,6 +87,8 @@ class TwilioView(View):
 		body = request.POST["Body"]
 		name = re.split("\W+", body.lower())[0]
 
+		print user_has_name(user, name)
+		print name
 		if user_has_name(user, name):
 			# They are replying to a job... Let's log that.
 			j = get_job_info(user, name)
@@ -89,19 +97,25 @@ class TwilioView(View):
 
 			if message.lower() == "decline":
 				user.StopWorking()
+
+				j[0].status = 0
+				j[0].save()
 				QueueJob(j[0])
+
 				return HttpResponse(respond_with_message("We have ended your involvement with that job. Expect another job coming soon."))
 
 			Communication.Log(j[0], message, j[1])
 
 			other = j[0].owner
 			# if this is from the owner
-			if j[1] == 1:
+			if j[1] == 1 and j[0].worker:
 				other = j[0].worker
 
 			other_profile = UserProfile.Get(other)
 
-			QueueTextToUser(other_profile.phone, "From Worker: " + message)
+			QueueTextToUser(other_profile.phone_number, "From Worker: " + message)
+
+			return HttpResponse(dont_respond())
 		else:
 			# The are creating a new job. Let's tell them.
 

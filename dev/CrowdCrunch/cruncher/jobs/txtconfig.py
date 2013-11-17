@@ -2,6 +2,8 @@
 from CrowdCrunch.settings import REDIS_URL
 from worker import conn
 
+from cruncher.models import *
+
 ## NAME CONTROL
 
 def get_redis_key(user_id, name):
