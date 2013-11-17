@@ -116,7 +116,7 @@ class TwilioView(View):
 			person_name = "Owner"
 			# if this is from the owner
 			if j[1] == 1 and j[0].worker:
-				person_name = "Worker" 
+				person_name = "Worker"
 				other = j[0].worker
 
 			other_profile = UserProfile.Get(other)

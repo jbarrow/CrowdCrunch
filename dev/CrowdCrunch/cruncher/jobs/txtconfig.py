@@ -27,7 +27,7 @@ def get_job_info(user, name):
 	c = c.split(":")
 
 	j = JOB_OWNER
-	if(c[1]==1):
+	if(c[1]==2):
 		j = JOB_WORKER
 
 	return (Job.objects.get(id=c[0]), j)
