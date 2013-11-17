@@ -16,6 +16,7 @@ def make_transaction(wallet_address, amount):
 
 class CoinBaseView(View):
 	def post(self, request, **kwargs):
+		print request.POST
 		print json.loads(request.POST)
 
 	@method_decorator(csrf_exempt)
