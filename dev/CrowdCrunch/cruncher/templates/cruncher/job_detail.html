@@ -11,8 +11,11 @@
 	</div>
 {% elif request.user == object.owner %}
 	<h4>Actions</h4>
-	<a href="#" class="btn btn-success btn-hg">Accept Work</a>
-	<a href="#" class="btn btn-link">Reject</a>
+	<a href="{% url "job-accept" object.id %}" class="btn btn-success btn-hg {% if object.status < 2 %}disabled{% endif %}">Accept Work</a>
+	<a href="{% url "job-reject" object.id %}" class="btn btn-link {% if object.status < 2 %}disabled{% endif %}">Reject</a>
+	{% if object.status < 2 %}
+	<span style="font-size: 12px; margin-left: 5px;">Wait to Accept or Reject once the Worker is finished.</span>
+	{% endif %}
 {% endif %}
 <br />
 <h4 style="text-align: right">Communications</h4>

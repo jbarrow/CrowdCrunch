@@ -35,6 +35,17 @@ class LoggedInDetailView(DetailView):
 
 		return context
 
+class CompleteJobStatus(LoggedInView):
+	status=2
+
+	@method_decorator(csrf_protect)
+	def post(self, request, **kwargs):
+		pk = request.POST['object_id']
+		j = Job.objects.get(id=pk)
+		j.status = self.status
+		j.save()
+		j.Complete()
+
 class ViewJob(LoggedInDetailView):
 	template_name="cruncher/job_detail.html"
 

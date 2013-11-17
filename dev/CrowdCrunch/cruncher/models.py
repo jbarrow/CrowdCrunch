@@ -23,6 +23,12 @@ class Job(models.Model):
 	def __unicode__(self):
 		return "(%s) %s wants %s" % (self.get_status_display(), self.owner, self.description)
 
+	def Complete(self):
+		if self.status == 3:
+			self.worker.AddCredits(1)
+		elif self.status == 2:
+			self.worker.RemoveCredits(1)
+
 	@classmethod
 	def Create(cls, description, budget, user):
 
