@@ -19,6 +19,9 @@ class Job(models.Model):
 	owner = models.ForeignKey(User, related_name="owned_jobs", null=True, blank=True)
 	worker = models.ForeignKey(User, related_name="worked_jobs", null=True, blank=True)
 
+	def __unicode__(self):
+		return "(%s) %s wants %s" % (self.get_status_display(), self.owner, self.description)
+
 	@classmethod
 	def Create(cls, description, budget, user):
 
@@ -65,6 +68,9 @@ class Communication(models.Model):
 	text = models.TextField()
 	timestamp = models.DateTimeField(auto_now_add=True, null=True)
 
+	def __unicode__(self):
+		return "%s on %s" % (self.get_sender_display(), self.job)
+
 	class Meta:
 		ordering = ['-timestamp']
 
@@ -103,6 +109,9 @@ class UserProfile(models.Model):
 	user_id = models.ForeignKey(User)
 	phone_number = models.CharField(max_length=255)
 	phone_verified = models.BooleanField(default=False)
+
+	def __unicode__(self):
+		return "%s (%s): %s credits" % (self.user_id, self.get_status_display(), str(self.credits))
 
 	@classmethod
 	def Get(cls, user):
