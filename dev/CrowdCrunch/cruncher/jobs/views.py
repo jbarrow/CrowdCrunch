@@ -13,8 +13,6 @@ from cruncher.jobs.txtl import *
 from cruncher.jobs.names import all_names, num_names
 from cruncher.queuer.bridge import *
 
-from cruncher import queue
-
 def get_random_name(user):
 	while(True):
 		n = random_name()
@@ -51,7 +49,7 @@ class TwilioView(View):
 		if user_has_last_work_request(user):
 			if message == "help":
 				# Respond with specific help
-				return HttpResponse(respond_with_message("Reply 'stop' to go offline, 'accept' to accept job, or 'decline' to decline job."))
+				return HttpResponse(respond_with_message("Reply 'quit' to go offline, 'accept' to accept job, or 'decline' to decline job."))
 
 			if message == "decline":
 				# Decline the job
@@ -67,13 +65,13 @@ class TwilioView(View):
 				user.StartWorking()
 				return HttpResponse(respond_with_message("This job's name is " + n + " please start future messages to it with the name. Text '" + n + ", I'm finished' when you are done."))
 
-			if message == "stop":
-				# Stop sending the user texts
+			if message == "quit":
+				# quit sending the user texts
 				clear_job_request_for_user(user)
 				user.MarkUnavailable()
 				return HttpResponse(respond_with_message("You are now marked as offline. Send 'crunchtime' to us again to start receiving jobs."))
 
-			return HttpResponse(respond_with_message("I didn't understand. Please reply with 'accept', 'decline' or 'stop'."))
+			return HttpResponse(respond_with_message("I didn't understand. Please reply with 'accept', 'decline' or 'quit'."))
 
 		# Handle help
 		if message == "help":
