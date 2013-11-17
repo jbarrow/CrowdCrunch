@@ -115,7 +115,7 @@ class TwilioView(View):
 			other = j[0].owner
 			person_name = "Owner"
 			# if this is from the owner
-			if j[1] == 2:
+			if j[1] == 1:
 				person_name = "Worker"
 				other = j[0].worker
 
