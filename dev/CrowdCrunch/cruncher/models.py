@@ -132,11 +132,11 @@ class UserProfile(models.Model):
 		return o
 
 	def GetCurrentJob(self):
-		return Job.objects.get(worker=self.request.user, status=1)
+		return Job.objects.get(worker=self.user_id, status=1)
 
 	def HasWork(self):
 		try:
-			Job.objects.get(worker=self.request.user, status=1)
+			Job.objects.get(worker=self.user_id, status=1)
 		except:
 			return False
 		return True
