@@ -62,7 +62,7 @@ class TwilioView(View):
 				j = get_last_work_request(user)
 				clear_job_request_for_user(user)
 				n = get_random_name(user)
-				set_job_for_user(user, n, j, JOB_WORKER)
+				set_job_for_user(user, n.lower(), j, JOB_WORKER)
 				user.StartWorking()
 				return HttpResponse(respond_with_message("This job's name is " + n + " please start future messages to it with the name. Text '" + n + ", I'm finished' when you are done."))
 
@@ -111,7 +111,7 @@ class TwilioView(View):
 			if (j):
 				QueueJob(j)
 				n = get_random_name(user)
-				set_job_for_user(user, n, j.id, JOB_OWNER)
+				set_job_for_user(user, n.lower(), j.id, JOB_OWNER)
 				return HttpResponse(respond_with_message("We have created your job. It is being sent to " + n + " as we speak. Please start messages regarding this job with " + n + "."))
 
 			return HttpResponse(respond_with_message("It looks like you don't have enough credits to make that request. Please login online and buy some more."))
