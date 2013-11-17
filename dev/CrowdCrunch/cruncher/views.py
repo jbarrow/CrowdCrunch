@@ -74,15 +74,15 @@ class CreateJobView(View):
 			return redirect("/dashboard?create-error")
 
 class CreditAccountView(View):
-	@method_decorator(csrf_protect)
-	def post(self, request, **kwargs):
-		p = UserProfile.Get(request.user)
+	def get(self, request, **kwargs):
+		if request.user.is_staff:
+			p = UserProfile.Get(request.user)
 
-		if(p):
-			p.AddCredits(5)
-			return redirect("/dashboard")
+			if(p):
+				p.AddCredits(5)
+				return redirect("/dashboard")
 		else:
-			return HttpResponse(status=500)
+			return HttpResponse(status=403)
 
 class DashboardView(LoggedInView):
 	template_name="dashboard.html" 
