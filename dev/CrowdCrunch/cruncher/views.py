@@ -42,7 +42,7 @@ class ViewJob(LoggedInDetailView):
 
 class CurrentJobView(ViewJob):
 	def get_object(self, queryset=None):
-		return None
+		return UserProfile.Get(self.request.user).GetCurrentJob()
 
 
 class VerifyPhoneView(View):
