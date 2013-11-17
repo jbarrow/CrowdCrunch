@@ -23,6 +23,8 @@ SECRET_KEY = '9a$49@8@tg%986^y0(x1r9td=btnk!h$gni=c*vo-7c6l!)1ch'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+LOGIN_URL='/'
+
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
