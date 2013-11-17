@@ -43,7 +43,7 @@
 			{% endfor %}
 	</table>
 
-{% elif request.user == object.owner %}
+{% if request.user == object.owner %}
 <script type="text/javascript">
 var $slider = $("#slider");
 if ($slider.length > 0) {
