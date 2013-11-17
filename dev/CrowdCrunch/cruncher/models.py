@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from cruncher.queue import *
+from cruncher.queuer.bridge import *
 # Create your models here.
 
 class Job(models.Model):
@@ -47,7 +47,7 @@ class Job(models.Model):
 
 		j.Queue()
 
-		return True
+		return j
 
 	@classmethod
 	def CreateWithPhone(cls, description, budget, phone):
@@ -59,7 +59,7 @@ class Job(models.Model):
 		return cls.Create(description, budget, u)
 
 	def Queue(self):
-		queue.QueueJob(self)
+		QueueJob(self)
 
 class Communication(models.Model):
 	SENDER_CHOICES = (

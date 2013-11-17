@@ -11,7 +11,7 @@ from cruncher.models import *
 from cruncher.jobs.txtconfig import *
 from cruncher.jobs.txtl import *
 from cruncher.jobs.names import all_names, num_names
-from cruncher.queue import *
+from cruncher.queuer.bridge import *
 
 from cruncher import queue
 
@@ -24,11 +24,11 @@ def get_random_name(user):
 
 
 def random_int(max_value):
-	random.randrange(0, max_value)
+	return random.randrange(0, max_value)
 
 def random_name():
 	i = random_int(num_names)
-	return all_names[i].lower()
+	return all_names[i]
 
 class TwilioView(View):
 	def post(self, request, **kwargs):
@@ -80,7 +80,7 @@ class TwilioView(View):
 			return HttpResponse(respond_with_message("Text a request and we will forward it to your personal assistant."))
 
 		body = request.POST["Body"]
-		name = re.split("\W+", body.lower())
+		name = re.split("\W+", body.lower())[0]
 
 		if user_has_name(user, name):
 			# They are replying to a job... Let's log that.
@@ -103,13 +103,18 @@ class TwilioView(View):
 
 			other_profile = UserProfile.Get(other)
 
-			queue.QueueTextToUser(other_profile.phone, "From Worker: " + message)
+			QueueTextToUser(other_profile.phone, "From Worker: " + message)
 		else:
 			# The are creating a new job. Let's tell them.
-			Job.Create(message, 0.0, user)
-			return HttpResponse(respond_with_message("We have created your job. It is being sent to workers as we speak."))
 
-		return HttpResponse(dont_respond())
+			j = Job.Create(body, 0.0, user.user_id)
+
+			if (j):
+				n = get_random_name(user)
+				set_job_for_user(user, n, j.id, JOB_OWNER)
+				return HttpResponse(respond_with_message("We have created your job. It is being sent to " + n + " as we speak. Please start messages regarding this job with " + n + "."))
+
+			return HttpResponse(respond_with_message("It looks like you don't have enough credits to make that request. Please login online and buy some more."))
 
 	@method_decorator(csrf_exempt)
 	def dispatch(self, *args, **kwargs):

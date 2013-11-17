@@ -4,8 +4,8 @@ from worker import conn
 
 ## NAME CONTROL
 
-def get_redis_key(user, name):
-	return "cc:" + str(user.id) + ":" + name
+def get_redis_key(user_id, name):
+	return "cc:" + str(user_id) + ":" + name
 
 def user_has_name(user, name):
 	return (conn.get(get_redis_key(user.id, name)) != None)
@@ -34,7 +34,7 @@ def get_job_info(user, name):
 def set_job_for_user(user, name, job_id, work_status):
 	if(work_status == JOB_WORKER):
 		conn.set(get_has_work_key(user), "yes")
-	conn.set(get_redis_key(user.id, name), job + ":" + work_status)
+	conn.set(get_redis_key(user.id, name), str(job_id) + ":" + str(work_status))
 
 ## HAS WORK
 
