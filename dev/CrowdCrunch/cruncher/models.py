@@ -37,7 +37,7 @@ class Job(models.Model):
 		j.cost = budget
 		j.owner = user
 		j.worker_id = 0
-		
+
 		try:
 			j.save()
 		except:
@@ -73,7 +73,7 @@ class UserProfile(models.Model):
 	)
 	status = models.IntegerField(choices = STATUS_CHOICES)
 	credits = models.IntegerField()
-	current_job = models.ForeignKey(Job) 
+	current_job = models.ForeignKey(Job, null=True, blank=True) 
 	user_id = models.ForeignKey(User)
 	phone_number = models.CharField(max_length=255)
 

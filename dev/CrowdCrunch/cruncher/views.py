@@ -106,7 +106,6 @@ class LandingView(TemplateView):
 			profile.phone_number = phone
 			profile.status = 2
 			profile.credits = 5
-			profile.current_job_id = 0
 			profile.user_id = user
 			profile.save()
 

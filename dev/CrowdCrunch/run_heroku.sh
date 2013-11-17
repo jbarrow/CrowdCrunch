@@ -1,3 +1,3 @@
 #!/bin/bash
 cd ../../
-heroku run $@
+heroku run "$@"
