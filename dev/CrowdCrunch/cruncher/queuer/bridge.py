@@ -6,6 +6,7 @@ from cruncher.jobs.txtl import send_text, send_verify_token
 import time
 
 from cruncher.models import UserProfile
+from cruncher.jobs.txtconfig import *
 
 q = Queue(connection=conn)
 
@@ -21,12 +22,9 @@ def WorkerJobRunner(job):
 		try:
 			user = UserProfile.objects.filter(status=1)[0]
 		except Exception as inst:
-			# print "Job Failed..."
-			# print type(inst)
-			# print inst.args
-			# print inst
 			time.sleep(1)
 
+	set_job_request_for_user(user, job.id)
 	QueueTextToUser(user.phone_number, "You have been assigned the job (reply with accept, decline, or stop): " + job.description)
 
 
