@@ -113,13 +113,13 @@ class TwilioView(View):
 			Communication.Log(j[0], message, j[1])
 
 			other = j[0].owner
-			person_name = "Owner"
 			# if this is from the owner
 			if j[1] == 1:
-				person_name = "Worker"
 				other = j[0].worker
 
 			other_profile = UserProfile.Get(other)
+			
+			person_name = get_name_for_user_job(other_profile, j[0])
 
 			QueueTextToUser(other_profile.phone_number, "From " + person_name + " : " + message)
 

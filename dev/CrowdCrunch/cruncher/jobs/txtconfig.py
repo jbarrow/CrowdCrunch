@@ -15,7 +15,13 @@ def user_has_name(user, name):
 def remove_name_for_user(user, name):
 	conn.delete(get_redis_key(user.id, name))
 
-
+def get_name_for_user_job(user, job):
+	k = conn.keys(get_redis_key(user.id, "*"))
+	for v in k:
+		o = conn.get(v).split(":")[0]
+		if o == job.id:
+			return v.split(":")[2]
+	return ""
 
 JOB_OWNER  = 1
 JOB_WORKER = 2
