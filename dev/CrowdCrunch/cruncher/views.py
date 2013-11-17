@@ -104,6 +104,19 @@ class DashboardView(LoggedInView):
 		context['verification_error'] = ("verify-error" in self.request.GET)
 		return context
 
+class ProfileView(LoggedInView):
+	template_name="profile.html"
+
+	def get_context_data(self, **kwargs):
+		context = super(ProfileView, self).get_context_data(**kwargs)
+		user = self.request.user
+		profile = UserProfile.objects.get(user_id=user)
+		return context
+
+	@method_decorator(csrf_protect)
+	def post(self, request, **kwargs):
+		return context
+
 class LandingView(TemplateView):
 	template_name="home.html"
 

@@ -25,6 +25,7 @@ urlpatterns = patterns('',
     url(r'^profile/credit/$', login_required(CreditAccountView.as_view())),
     url(r'^profile/verify/$', login_required(VerifyPhoneView.as_view())),
     url(r'^profile/current$', login_required(CurrentJobView.as_view())),
+    url(r'^profile/$', login_required(ProfileView.as_view())),
     
     url(r'^receive-message/$', TwilioView.as_view()),
 
