@@ -58,7 +58,7 @@ def get_last_work_request(user):
 	return conn.get(get_last_work_request_key)
 
 def set_job_request_for_user(user, job_id):
-	conn.set(get_last_work_request_key(user), job)
+	conn.set(get_last_work_request_key(user), job_id)
 
 def clear_job_request_for_user(user):
 	conn.delete(get_last_work_request_key(user))
