@@ -56,6 +56,7 @@ class CompleteJobStatus(LoggedInView):
 		j.status = self.status
 		j.save()
 		j.Complete()
+		return redirect("/jobs/" + str(j.id))
 
 class ViewJob(LoggedInDetailView):
 	template_name="cruncher/job_detail.html"
