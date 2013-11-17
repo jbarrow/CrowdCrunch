@@ -177,11 +177,11 @@ class UserProfile(models.Model):
 		return True
 
 	def StarValue(self):
-		j = self.worked_jobs.filter(Q(status=3) | Q(status=4))
+		j = self.user_id.worked_jobs.filter(Q(status=3) | Q(status=4))
 		total = 0.0
 		for x in j:
 			total += x.rating
 		return total/len(j) if len(j) > 0 else 0.0
 
 	def BudgetEligible(self):
-		return (self.worked_jobs.filter(rating__gte=3).count() >= 5)
+		return (self.user_id.worked_jobs.filter(rating__gte=3).count() >= 5)
