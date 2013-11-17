@@ -12,8 +12,6 @@ from django.db.models import Q
 
 from django.http import HttpResponse
 
-from texting.texting import *
-
 from django.views.generic.detail import DetailView
 
 class LoggedInView(TemplateView):

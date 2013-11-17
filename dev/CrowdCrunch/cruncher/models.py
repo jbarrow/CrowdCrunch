@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from cruncher.queue import *
 # Create your models here.
 
 class Job(models.Model):
@@ -43,7 +44,9 @@ class Job(models.Model):
 		except:
 			p.AddCredits(1)
 			return False
-		# Start Working Here..
+
+		j.Queue()
+
 		return True
 
 	@classmethod
@@ -54,6 +57,9 @@ class Job(models.Model):
 		except:
 			return False
 		return cls.Create(description, budget, u)
+
+	def Queue(self):
+		queue.QueueJob(self)
 
 class Communication(models.Model):
 	SENDER_CHOICES = (
@@ -70,9 +76,13 @@ class Communication(models.Model):
 		ordering = ['-timestamp']
 
 	@classmethod
-	def Log(job, text, sender):
+	def Log(cls, job, text, sender):
+		cls.LogId(job.id, text, sender)
+
+	@classmethod
+	def LogId(cls, job_id, text, sender):
 		c = Communication()
-		c.job = job
+		c.job_id = job_id
 		c.sender = sender
 		c.text = text
 		c.save()
@@ -91,7 +101,8 @@ class UserProfile(models.Model):
 		(0, "Unavailable"),
 		(1, "Available"),
 		(2, "Unknown"),
-		(3, "Error"),
+		(3, "Working"),
+		(4, "Error"),
 	)
 	status = models.IntegerField(choices = STATUS_CHOICES)
 	credits = models.IntegerField()
@@ -129,6 +140,18 @@ class UserProfile(models.Model):
 		return True
 
 	def MarkAvailable(self):
+		self.status = 1
+		self.save()
+
+	def MarkUnavailable(self):
+		self.status = 0
+		self.save()
+
+	def StartWorking(self):
+		self.status = 3
+		self.save()
+
+	def StopWorking(self):
 		self.status = 1
 		self.save()
 

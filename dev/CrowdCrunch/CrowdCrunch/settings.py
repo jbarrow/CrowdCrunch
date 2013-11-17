@@ -29,6 +29,8 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+REDIS_URL = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
+
 
 # Application definition
 

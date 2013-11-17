@@ -1,2 +1,2 @@
 web: gunicorn CrowdCrunch.wsgi
-worker: python worker.py
+worker: DJANGO_SETTINGS_MODULE=settings rqworker high default low
