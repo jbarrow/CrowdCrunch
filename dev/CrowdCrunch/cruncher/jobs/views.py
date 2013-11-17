@@ -118,8 +118,6 @@ class TwilioView(View):
 				return HttpResponse(respond_with_message("We have ended your involvement with that job. Expect another job coming soon."))
 
 			if "accept" in message.lower() and j[0].owner == user and j[0].status == 2:
-				user.StopWorking()
-
 				j[0].status = 3
 				j[0].save()
 				j[0].Complete()
@@ -128,16 +126,14 @@ class TwilioView(View):
 				return HttpResponse(respond_with_message("You have accepted the work, the worker will be credited."))
 
 			if "reject" in message.lower() and j[0].owner == user and j[0].status == 2:
-				user.StopWorking()
-
 				j[0].status = 4
 				j[0].save()
 				j[0].Complete()
 
 				QueueTextToUser(UserProfile.Get(j[0].worker).phone_number, "The task you were working on was rejected.")
-				return HttpResponse(respond_with_message("I'm sorry to here that you have rejected the work. Should we try again?")
+				return HttpResponse(respond_with_message("I'm sorry to here that you have rejected the work. Should we try again?"))
 
-			if "i'm finished" in message.lower() and j[1] == 2 and j[0].worker == user:
+			if "i'm finished" in message.lower() and j[1] == 2:
 				user.StopWorking()
 				j[0].status = 2
 				j[0].save()
