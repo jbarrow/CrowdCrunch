@@ -10,7 +10,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding field 'UserProfile.user_id'
         db.add_column(u'cruncher_userprofile', 'user_id',
-                      self.gf('django.db.models.fields.related.ForeignKey')(default='', to=orm['auth.User']),
+                      self.gf('django.db.models.fields.related.ForeignKey')(default='', blank=True, to=orm['auth.User']),
                       keep_default=False)
 
         # Adding field 'UserProfile.phone_number'
