@@ -20,7 +20,7 @@ def send_verify_token(number):
 	the token to be stored in the databse
 	"""
 	token = generate_token()
-	send_text(number, "Your token is: " + token)
+	send_text(number, "Your Crowd Crunch verification token is: " + token)
 	return token
 
 def dont_respond():
