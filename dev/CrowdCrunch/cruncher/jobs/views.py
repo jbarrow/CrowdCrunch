@@ -40,7 +40,7 @@ class TwilioView(View):
 
 		# User wants to go online
 		if message == "crunchtime":
-			if(user.status == 3):
+			if(user.status == 3 or user.status == 1):
 				return HttpResponse(respond_with_message("Finish one thing before you start another."))
 			else:
 				user.MarkAvailable()
