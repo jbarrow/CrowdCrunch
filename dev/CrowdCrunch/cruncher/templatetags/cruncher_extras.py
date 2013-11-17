@@ -12,6 +12,6 @@ def has_work(user):
 	return UserProfile.Get(user).HasWork()
 	
 @register.filter
-def has_work(user):
-	return UserProfile.Get(user).HasWork()
+def star_value(user):
+	return UserProfile.Get(user).StarValue()
 

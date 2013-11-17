@@ -6,7 +6,7 @@
 		<div class="container">
 			<div class="col-md-4">
 				<ul class="nav nav-list nav-list-vivid">
-						<li class="nav-header">My Account - <strong>{{ stars }} Stars</strong></li>
+						<li class="nav-header">My Account - <strong>{{ request.user|star_value }} Stars</strong></li>
 						<li {% active request "/dashboard" %}>
 							<a href="/dashboard">
 								Dashboard
@@ -30,7 +30,7 @@
 								Add Credits
 							</a>
 						</li>
-						<li {% active request "/profile" %}>
+						<li {% active request "/profile/" %}>
 							<a href="/profile">
 								My Profile
 							</a>

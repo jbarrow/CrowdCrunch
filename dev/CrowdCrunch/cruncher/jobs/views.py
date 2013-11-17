@@ -106,10 +106,15 @@ class TwilioView(View):
 				return HttpResponse(respond_with_message("We have ended your involvement with that job. Expect another job coming soon."))
 
 
-			if "i'm finished" in message.lower():
+			if "i'm finished" in message.lower() and j[1] == 2:
 				user.StopWorking()
 				j[0].status = 2
 				j[0].save()
+
+				other_profile = UserProfile.Get(j[0].owner)
+				name = get_name_for_user_job(other_profile, j[0])
+
+				QueueTextToUser(UserProfile.Get(j[0].owner).phone_number, "Your task, " + name + ", has been completed.")
 				return HttpResponse(respond_with_message("Good work. We will send you another job as it becomes available."))
 
 			Communication.Log(j[0], message, j[1])

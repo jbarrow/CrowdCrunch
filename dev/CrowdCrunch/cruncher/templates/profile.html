@@ -1,148 +1,30 @@
-{% extends "base.html" %}
-{% load cruncher_extras %}
+{% extends "dashboard.html" %}
 
-{% block content %}
-	<div class="body">
-		<div class="container">
-			<div class="col-md-4">
-				<ul class="nav nav-list nav-list-vivid">
-						<li class="nav-header">My Account - <strong>{{ stars }} Stars</strong></li>
-						<li {% active request "/dashboard" %}>
-							<a href="/dashboard">
-								Dashboard
-							</a>
-						</li>
-						{% if request.user|has_work %}
-						<li {% active request "/profile/current" %}>
-							<a href="/profile/current">
-								Current Work
-								<!-- <span class="badge pull-right">1</span> -->
-							</a>
-						</li>
-						{% endif %}
-						<li>
-							<a data-toggle="modal" data-target="#createJob">
-								Start a Job
-							</a>
-						</li>
-						<li>
-							<a data-toggle="modal" data-target="#addCredits">
-								Add Credits
-							</a>
-						</li>
-						<li {% active request "/profile" %}>
-							<a href="/profile">
-								My Profile
-							</a>
-						</li>
-						<li>
-							<a href="/logout">
-								Sign Out
-							</a>
-						</li>
-					</ul>
-			</div>
-			<div class="col-md-8">
+{% block dcontent %}
+<h3>Update My Account</h3>
 
-				<h3>Update My Account</h3>
-
-				<form role="form">
-					<div class="form-group">
-						<label for="inputUsernameEmail">Email</label>
-						<input type="text" class="form-control" id="inputUsernameEmail" value="{{ request.user.email }}">
-					</div>
-					<div class="form-group">
-						<label for="inputPassword">New Password</label>
-						<input type="password" class="form-control" id="inputPassword">
-					</div>
-					<div class="form-group">
-						<label for="inputPassword">Old Password</label>
-						<input type="password" class="form-control" id="inputPassword">
-					</div>
-					<button type="submit" class="btn btn btn-primary">
-						Update My Account
-					</button>
-				</form>
-
-			</div>
-		</div>
+<form role="form" method="post">
+	{% csrf_token %}
+	{% if password_error %}
+		<div class="dialog dialog-danger">You seem to have mistyped your old password. We will need that to change any information.</div>
+	{% endif %}
+	{% if success %}
+		<div class="dialog dialog-success">You have successfully updated your profile.</div>
+	{% endif %}
+	<div class="form-group">
+		<label for="inputUsernameEmail">Email</label>
+		<input type="text" class="form-control" id="inputUsernameEmail" value="{{ request.user.email }}" name="username">
 	</div>
-
-	<div class="modal" id="verifyPhone">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close fui-cross" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title">Verify your Phone</h3>
-				</div>
-
-				<form role="form" action="/profile/verify/" method="post">
-					{% csrf_token %}
-					<div class="modal-body">
-							<div class="form-group">
-								<label for="inputUsernameEmail">Enter the code texted to your mobile phone: </label>
-								<input type="text" class="form-control" id="inputUsernameEmail" name="code">
-							</div>
-					</div>
-
-					<div class="modal-footer">
-						<a href="#" class="btn btn-default btn-wide" data-dismiss="modal" aria-hidden="true">Cancel</a>
-						<button type="submit" class="btn btn-primary btn-wide">Okay</a>
-					</div>
-				</form>
-			</div>
-		</div>  
+	<div class="form-group">
+		<label for="inputPassword">New Password</label>
+		<input type="password" class="form-control" id="inputPassword" name="new_password">
 	</div>
-
-	<div class="modal" id="addCredits">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close fui-cross" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title">Add Credits</h3>
-				</div>
-
-				<div class="modal-body">
-					<iframe src="https://coinbase.com/inline_payments/c87d064b2a97bc1f93bbf58e10045915?c={{ request.user.id }}" style="width: 500px; height: 160px; border: none; box-shadow: 0 1px 3px rgba(0,0,0,0.25); overflow: hidden;" scrolling="no" allowtransparency="true" frameborder="0"></iframe>
-				</div>
-
-				<form action="/profile/credit/" method="post">
-					{% csrf_token %}
-					<div class="modal-footer">
-						<a href="#" class="btn btn-default btn-wide" data-dismiss="modal" aria-hidden="true">Done</a>
-					</div>
-				</form>
-			</div>
-		</div>  
+	<div class="form-group">
+		<label for="inputPassword">Old Password</label>
+		<input type="password" class="form-control" id="inputPassword" name="password" placeholder="We need this for all changes."> 
 	</div>
-
-	<div class="modal" id="createJob">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close fui-cross" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title">Create a Job</h3>
-				</div>
-
-				<form role="form" action="/jobs/new/" method="post">
-					<div class="modal-body">
-							{% csrf_token %}
-							<div class="form-group">
-								<label for="body">Simply add a description of the job you would like done:</label>
-								<textarea class="form-control" id="body" placeholder="Make sure to add a budget if the task will require money." name="description"></textarea>
-							</div>
-							<div class="form-group">
-								<label for="inputUsernameEmail">Budget:</label>
-								<input type="text" class="form-control" id="inputUsernameEmail" placeholder="$0.00" name="budget">
-							</div>
-					</div>
-
-					<div class="modal-footer">
-						<a href="#" class="btn btn-default btn-wide" data-dismiss="modal" aria-hidden="true">Cancel</a>
-						<button type="submit" class="btn btn-primary btn-wide">Create Job</a>
-					</div>
-				</form>
-			</div>
-		</div>  
-	</div>
+	<button type="submit" class="btn btn btn-primary">
+		Update My Account
+	</button>
+</form>
 {% endblock %}

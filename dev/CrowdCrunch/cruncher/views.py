@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_protect
 
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import check_password
 
 from cruncher.models import *
 from django.db.models import Q
@@ -109,13 +110,22 @@ class ProfileView(LoggedInView):
 
 	def get_context_data(self, **kwargs):
 		context = super(ProfileView, self).get_context_data(**kwargs)
-		user = self.request.user
-		profile = UserProfile.objects.get(user_id=user)
+		context['password_error'] = ("password-error" in self.request.GET)
+		context['success'] = ("success" in self.request.GET)
 		return context
 
 	@method_decorator(csrf_protect)
 	def post(self, request, **kwargs):
-		return context
+		user = request.user
+		if(check_password(request.POST['password'], user.password)):
+			user.email = request.POST['username']
+			user.username = request.POST['username']
+			if(request.POST['new_password'] != ""):
+				user.set_password(request.POST['new_password'])
+			user.save()
+			return redirect("/profile?success")
+		else:
+			return redirect("/profile?password-error")
 
 class LandingView(TemplateView):
 	template_name="home.html"
