@@ -17,8 +17,8 @@ class Job(models.Model):
 	rating = models.IntegerField(default=0)
 	cost = models.DecimalField(max_digits=5, decimal_places=2, default=0)
 	created = models.DateTimeField(auto_now_add=True, null=True)
-	owner = models.ForeignKey(User, related_name="owned_jobs")
-	worker = models.ForeignKey(User, related_name="worked_jobs")
+	owner = models.ForeignKey(User, related_name="owned_jobs", null=True, blank=True)
+	worker = models.ForeignKey(User, related_name="worked_jobs", null=True, blank=True)
 
 	@classmethod
 	def Create(cls, description, budget, user):
@@ -37,7 +37,6 @@ class Job(models.Model):
 		j.status = 0
 		j.cost = budget
 		j.owner = user
-		j.worker_id = 0
 
 		try:
 			j.save()
