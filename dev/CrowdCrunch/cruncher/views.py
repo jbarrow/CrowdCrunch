@@ -46,12 +46,11 @@ class RateJob(View):
 		else:
 			return HttpResponse(status=403)
 
-class CompleteJobStatus(LoggedInView):
+class CompleteJobStatus(View):
 	status=2
 
-	@method_decorator(csrf_protect)
-	def post(self, request, **kwargs):
-		pk = request.POST['object_id']
+	def get(self, request, **kwargs):
+		pk = kwargs['pk']
 		j = Job.objects.get(id=pk)
 		j.status = self.status
 		j.save()
