@@ -40,8 +40,25 @@
 					</ul>
 			</div>
 			<div class="col-md-8">
+				{% if unverified %}
+				<div class="dialog dialog-danger">
+					You still have to <a href="#" data-toggle="modal" data-target="#verifyPhone">verify your phone number</a> before you can start a job.
+				</div>
+				{% endif %}
+				{% if just_verified %}
+				<div class="dialog dialog-success">
+					Your phone is now verified! Go ahead and start your first job by texting in, or by clicking to your left.
+				</div>
+				{% endif %}
+				{% if verification_error %}
+				<div class="dialog dialog-warning">
+					Something went wrong while verifying your number. Are you sure you typed it in correctly?
+				</div>
+				{% endif %}
 				{% if new %}
-					<p>Looks like you are new around here! As you can see, we went ahead and added 5 credits to your account. Each credit counts towards 1 request for your virtual assistant.</p>
+				<div class="dialog dialog-success">
+					Looks like you are new around here! As you can see, we went ahead and added 5 credits to your account. Each credit counts towards 1 request for your virtual assistant.
+				</div>
 				{% endif %}
 				{% if created %}
 					<p>Your job has been created. Look for it in the list below!</p>
@@ -89,19 +106,20 @@
 					<h4 class="modal-title">Verify your Phone</h3>
 				</div>
 
-				<div class="modal-body">
-					<form role="form">
-						<div class="form-group">
-							<label for="inputUsernameEmail">Enter the code texted to your mobile phone: </label>
-							<input type="text" class="form-control" id="inputUsernameEmail">
-						</div>
-					</form>
-				</div>
+				<form role="form" action="/profile/verify/" method="post">
+					{% csrf_token %}
+					<div class="modal-body">
+							<div class="form-group">
+								<label for="inputUsernameEmail">Enter the code texted to your mobile phone: </label>
+								<input type="text" class="form-control" id="inputUsernameEmail" name="code">
+							</div>
+					</div>
 
-				<div class="modal-footer">
-					<a href="#" class="btn btn-default btn-wide" data-dismiss="modal" aria-hidden="true">Cancel</a>
-					<a href="#" class="btn btn-primary btn-wide">Okay</a>
-				</div>
+					<div class="modal-footer">
+						<a href="#" class="btn btn-default btn-wide" data-dismiss="modal" aria-hidden="true">Cancel</a>
+						<button type="submit" class="btn btn-primary btn-wide">Okay</a>
+					</div>
+				</form>
 			</div>
 		</div>  
 	</div>

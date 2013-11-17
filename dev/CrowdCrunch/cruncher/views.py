@@ -14,13 +14,28 @@ from django.http import HttpResponse
 
 from texting.texting import *
 
+class VerifyPhoneView(View):
+	@method_decorator(csrf_protect)
+	def post(self, request, **kwargs):
+		p = UserProfile.Get(request.user)
+		code = request.POST['code']
+		if(p):
+			phone = p.phone_number
+			phone = phone.split(":")
+			if(len(phone) == 2 and phone[1] == code):
+				p.phone_verified = True
+				p.phone_number = phone[0]
+				p.save()
+				return redirect("/dashboard?verified")
+		return redirect("/dashboard?verify-error")
+
 class CreateJobView(View):
 	@method_decorator(csrf_protect)
 	def post(self, request, **kwargs):
 		description = request.POST['description']
 		budget = request.POST['budget'] if request.POST["budget"] != "" else 0.0
 		print budget
-		result = Job.Create(description, budget, self.request.user)
+		result = Job.Create(description, budget, request.user)
 		if(result):
 			return redirect("/dashboard?created")
 		else:
@@ -61,6 +76,9 @@ class DashboardView(LoggedInView):
 		context['new'] = ("new" in self.request.GET)
 		context['created'] = ("created" in self.request.GET)
 		context['create_error'] = ("create-error" in self.request.GET)
+		context['unverified'] = not profile.phone_verified
+		context['just_verified'] = ("verified" in self.request.GET)
+		context['verification_error'] = ("verify-error" in self.request.GET)
 		return context
 
 class LandingView(TemplateView):
@@ -104,15 +122,15 @@ class LandingView(TemplateView):
 			user = User.objects.create_user(email, email, password)
 			user.save()
 
+			# send verify token
+			verify_token = send_verify_token(phone)
+
 			profile = UserProfile()
-			profile.phone_number = phone
+			profile.phone_number = (phone + ":" + verify_token)
 			profile.status = 2
 			profile.credits = 5
 			profile.user_id = user
 			profile.save()
-
-			# send verify token
-			send_verify_token(phone)
 
 			user = authenticate(username=email, password=password)
 			login(request, user)
