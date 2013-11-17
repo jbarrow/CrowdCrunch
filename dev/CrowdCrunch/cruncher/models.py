@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from cruncher.queuer.bridge import *
 # Create your models here.
 
 class Job(models.Model):
@@ -44,8 +43,6 @@ class Job(models.Model):
 			p.AddCredits(1)
 			return False
 
-		j.Queue()
-
 		return j
 
 	@classmethod
@@ -56,9 +53,6 @@ class Job(models.Model):
 		except:
 			return False
 		return cls.Create(description, budget, u)
-
-	def Queue(self):
-		QueueJob(self)
 
 class Communication(models.Model):
 	SENDER_CHOICES = (

@@ -14,6 +14,8 @@ from django.http import HttpResponse
 
 from django.views.generic.detail import DetailView
 
+from cruncher.queuer.bridge import QueueJob
+
 class LoggedInView(TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super(LoggedInView, self).get_context_data(**kwargs)
@@ -66,6 +68,7 @@ class CreateJobView(View):
 		print budget
 		result = Job.Create(description, budget, request.user)
 		if(result):
+			QueueJob(result)
 			return redirect("/dashboard?created")
 		else:
 			return redirect("/dashboard?create-error")

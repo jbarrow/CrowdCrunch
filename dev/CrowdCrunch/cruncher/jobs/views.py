@@ -90,7 +90,7 @@ class TwilioView(View):
 
 			if message.lower() == "decline":
 				user.StopWorking()
-				jo.Queue()
+				QueueJob(jo)
 				return HttpResponse(respond_with_message("We have ended your involvement with that job. Expect another job coming soon."))
 
 			Communication.LogId(j[0], message, j[1])
@@ -109,6 +109,7 @@ class TwilioView(View):
 			j = Job.Create(body, 0.0, user.user_id)
 
 			if (j):
+				QueueJob(j)
 				n = get_random_name(user)
 				set_job_for_user(user, n, j.id, JOB_OWNER)
 				return HttpResponse(respond_with_message("We have created your job. It is being sent to " + n + " as we speak. Please start messages regarding this job with " + n + "."))
