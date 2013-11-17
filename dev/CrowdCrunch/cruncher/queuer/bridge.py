@@ -21,16 +21,15 @@ def WorkerJobRunner(job):
 	while user == None:
 		try:
 			# Algorithm in Finding User
-			user = UserProfile.objects.filter(status=1)
-			real_user = None
+			tmp = UserProfile.objects.filter(status=1)
 			if job.budget > 0.0:
-				for v in user:
+				for v in tmp:
 					if v.BudgetEligible():
-						real_user = v
+						user = v
 						break
+				raise Exception("Couldn't find a good user.")
 			else:
-				real_user=user[0]
-			user = real_user
+				user=tmp[0]
 		except Exception as inst:
 			time.sleep(1)
 
