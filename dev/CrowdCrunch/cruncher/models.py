@@ -91,7 +91,7 @@ class UserProfile(models.Model):
 	def GetFromPhone(cls, phone):
 		o = False
 		try:
-			o = UserProfile.objects.get(phone=phone)
+			o = UserProfile.objects.get(phone_number=phone)
 		except:
 			return False
 		return o
@@ -99,7 +99,7 @@ class UserProfile(models.Model):
 	def MarkAvailable(self):
 		self.status = 1
 		self.save()
-		
+
 	def AddCredits(self, credit_amount):
 		self.credits += credit_amount
 		self.save()
