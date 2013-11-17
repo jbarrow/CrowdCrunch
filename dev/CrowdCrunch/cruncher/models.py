@@ -177,3 +177,6 @@ class UserProfile(models.Model):
 
 	def StarValue(self):
 		return 0.0
+
+	def BudgetEligible(self):
+		return (self.worked_jobs.filter(rating__gte=3).count() >= 5)

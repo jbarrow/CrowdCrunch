@@ -20,7 +20,17 @@ def WorkerJobRunner(job):
 	user = None
 	while user == None:
 		try:
-			user = UserProfile.objects.filter(status=1)[0]
+			# Algorithm in Finding User
+			user = UserProfile.objects.filter(status=1)
+			real_user = None
+			if job.budget > 0.0:
+				for v in user:
+					if v.BudgetEligible():
+						real_user = v
+						break
+			else:
+				real_user=user[0]
+			user = real_user
 		except Exception as inst:
 			time.sleep(1)
 
