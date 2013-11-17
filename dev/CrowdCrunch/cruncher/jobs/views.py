@@ -90,6 +90,7 @@ class TwilioView(View):
 		if user_has_name(user, name):
 			# They are replying to a job... Let's log that.
 			j = get_job_info(user, name)
+			print j
 
 			message = body[len(name):]
 
@@ -112,13 +113,15 @@ class TwilioView(View):
 			Communication.Log(j[0], message, j[1])
 
 			other = j[0].owner
+			person_name = "Owner"
 			# if this is from the owner
 			if j[1] == 1 and j[0].worker:
+				person_name = "Worker" 
 				other = j[0].worker
 
 			other_profile = UserProfile.Get(other)
 
-			QueueTextToUser(other_profile.phone_number, "From Worker: " + message)
+			QueueTextToUser(other_profile.phone_number, "From " + person_name + " : " + message)
 
 			return HttpResponse(dont_respond())
 		else:
