@@ -5,7 +5,7 @@ from worker import conn
 ## NAME CONTROL
 
 def get_redis_key(user, name):
-	return "cc:" + user.id + ":" + name
+	return "cc:" + str(user.id) + ":" + name
 
 def user_has_name(user, name):
 	return (conn.get(get_redis_key(user.id, name)) != None)
@@ -39,7 +39,7 @@ def set_job_for_user(user, name, job_id, work_status):
 ## HAS WORK
 
 def get_has_work_key(user):
-	return "cc:" + user.id + ":__working"
+	return "cc:" + str(user.id) + ":__working"
 
 def user_has_work(user):
 	return (conn.get(get_has_work_key(user.id)) != None)
@@ -49,7 +49,7 @@ def user_finished_work(user):
 
 ## JOB REQUEST
 def get_last_work_request_key(user_id):
-	return "cc:" + user_id + ":__last_work_request"
+	return "cc:" + str(user_id) + ":__last_work_request"
 
 def user_has_last_work_request(user):
 	return (conn.get(get_last_work_request_key(user.id)) != None)
