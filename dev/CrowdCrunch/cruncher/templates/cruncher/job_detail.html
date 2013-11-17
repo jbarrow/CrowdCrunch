@@ -16,14 +16,17 @@
 	{% if object.status < 2 %}
 	<span style="font-size: 12px; margin-left: 5px;">Wait to Accept or Reject once the Worker is finished.</span>
 	{% endif %}
-	<br />
+	{% if object.status >= 2 %}
+	<br/><br/>
+	<p>Rate your assistant's work!</p>
 	<div class="btn-group">
-		<a href="" class="btn btn-default">1 Star</a>
-		<a href="" class="btn btn-default">2 Stars</a>
-		<a href="" class="btn btn-primary">3 Stars</a>
-		<a href="" class="btn btn-default">4 Stars</a>
-		<a href="" class="btn btn-default">5 Stars</a>
+		<a href="/jobs/{{ object.id }}/rate/1" class="btn {% if object.rating == 1 %}btn-primary{% else %}btn-default{% endif %}">1 Star</a>
+		<a href="/jobs/{{ object.id }}/rate/2" class="btn {% if object.rating == 2 %}btn-primary{% else %}btn-default{% endif %}">2 Stars</a>
+		<a href="/jobs/{{ object.id }}/rate/3" class="btn {% if object.rating == 3 %}btn-primary{% else %}btn-default{% endif %}">3 Stars</a>
+		<a href="/jobs/{{ object.id }}/rate/4" class="btn {% if object.rating == 4 %}btn-primary{% else %}btn-default{% endif %}">4 Stars</a>
+		<a href="/jobs/{{ object.id }}/rate/5" class="btn {% if object.rating == 5 %}btn-primary{% else %}btn-default{% endif %}">5 Stars</a>
 	</div>
+	{% endif %}
 {% endif %}
 <br />
 <h4 style="text-align: right">Communications</h4>

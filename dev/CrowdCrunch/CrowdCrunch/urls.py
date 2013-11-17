@@ -23,6 +23,7 @@ urlpatterns = patterns('',
     url(r'^jobs/(?P<pk>\d+)$',  login_required(ViewJob.as_view()), name='job-view'),
     url(r'^jobs/(?P<pk>\d+)/accept$',  login_required(CompleteJobStatus.as_view(status=3)), name='job-accept'),
     url(r'^jobs/(?P<pk>\d+)/reject$',  login_required(CompleteJobStatus.as_view(status=4)), name='job-reject'),
+    url(r'^jobs/(?P<pk>\d+)/rate/(?P<r>\d+)$',  login_required(RateJob.as_view()), name='job-rate'),
 
     url(r'^profile/credit/$', login_required(CreditAccountView.as_view())),
     url(r'^profile/verify/$', login_required(VerifyPhoneView.as_view())),

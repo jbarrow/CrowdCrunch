@@ -35,6 +35,17 @@ class LoggedInDetailView(DetailView):
 
 		return context
 
+class RateJob(View):
+	def get(self, request, **kwargs):
+		j = Job.objects.get(id=kwargs['pk'])
+		if(request.user == j.owner):
+			rate = int(kwargs['r'])
+			j.rating = rate
+			j.save()
+			return redirect("/jobs/" + str(j.id))
+		else:
+			return HttpResponse(status=403)
+
 class CompleteJobStatus(LoggedInView):
 	status=2
 
