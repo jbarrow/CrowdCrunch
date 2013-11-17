@@ -1,1 +1,2 @@
 web: gunicorn CrowdCrunch.wsgi
+worker: python worker.py
