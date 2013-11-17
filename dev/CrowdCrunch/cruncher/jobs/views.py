@@ -16,6 +16,7 @@ from cruncher.jobs.names import all_names, num_names
 from cruncher.queuer.bridge import *
 
 p = re.compile("(/d) stars?")
+b = re.compile("budget (/d+) credits")
 
 def get_random_name(user):
 	while(True):
@@ -95,7 +96,6 @@ class TwilioView(View):
 		if user_has_name(user, name):
 			# They are replying to a job... Let's log that.
 			j = get_job_info(user, name)
-			print j
 
 			message = body[len(name):]
 
@@ -171,7 +171,12 @@ class TwilioView(View):
 		else:
 			# The are creating a new job. Let's tell them.
 
-			j = Job.Create(body, 0.0, user.user_id)
+			the_budget = 0
+			m = b.match(body.lower())
+			if m != None:
+				the_budget = int(m.group(1))
+				
+			j = Job.Create(body, the_budget, user.user_id)
 
 			if (j):
 				QueueJob(j)

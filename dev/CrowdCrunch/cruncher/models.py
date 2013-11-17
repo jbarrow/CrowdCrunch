@@ -36,7 +36,7 @@ class Job(models.Model):
 		p = UserProfile.Get(user)
 
 		if(p):
-			ok = p.RemoveCredits(1)
+			ok = p.RemoveCredits(1 + budget)
 			if(not ok):
 				return False
 		else:
@@ -51,7 +51,7 @@ class Job(models.Model):
 		try:
 			j.save()
 		except:
-			p.AddCredits(1)
+			p.AddCredits(1 + budget)
 			return False
 
 		return j
