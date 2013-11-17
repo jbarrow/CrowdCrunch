@@ -68,6 +68,7 @@ class TwilioView(View):
 
 				j = Job.objects.get(id = j)
 				j.status = 1
+				j.worker = user.user_id
 				j.save()
 
 				return HttpResponse(respond_with_message("This job's name is " + n + " please start future messages to it with the name. Text '" + n + ", I'm finished' when you are done."))
@@ -98,6 +99,7 @@ class TwilioView(View):
 				user.StopWorking()
 
 				j[0].status = 0
+				j[0].worker = None
 				j[0].save()
 				QueueJob(j[0])
 
@@ -118,7 +120,7 @@ class TwilioView(View):
 				other = j[0].worker
 
 			other_profile = UserProfile.Get(other)
-			
+
 			person_name = get_name_for_user_job(other_profile, j[0])
 
 			QueueTextToUser(other_profile.phone_number, "From " + person_name + " : " + message)
