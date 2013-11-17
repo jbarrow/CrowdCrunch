@@ -20,7 +20,7 @@ def send_verify_token(number):
 	the token to be stored in the databse
 	"""
 	token = generate_token()
-	client.messages.create(to=number, from_="+17039978527", body="Your token is: " + token)
+	send_text(number, "Your token is: " + token)
 	return token
 
 def dont_respond():
@@ -30,3 +30,6 @@ def respond_with_message(message):
 	r = twiml.Response()
 	r.message(message)
 	return str(r)
+
+def send_text(number, message):
+	client.messages.create(to=number, from_="+17039978527", body=message)
