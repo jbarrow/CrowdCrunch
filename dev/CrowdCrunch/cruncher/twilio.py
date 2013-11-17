@@ -9,6 +9,7 @@ from cruncher.models import *
 class TwilioView(View):
 	def post(self, request, **kwargs):
 		user = UserProfile.GetFromPhone(request.POST["From"])
+		print request.POST
 		if(user == False):
 			return HttpResponse(respond_with_message("You aren't a CrowdCrunch member. Sign up at http://crowdcrunch.com!"))
 		return HttpResponse(dont_respond())
