@@ -50,7 +50,7 @@ class TwilioView(View):
 		if user_has_last_work_request(user):
 			if message == "help":
 				# Respond with specific help
-				return HttpResponse(respond_with_message("Reply 'quit' to go offline, 'accept' to accept job, or 'decline' to decline job."))
+				return HttpResponse(respond_with_message("Reply 'offline' to go offline, 'accept' to accept job, or 'decline' to decline job."))
 
 			if message == "decline":
 				# Decline the job
@@ -72,13 +72,13 @@ class TwilioView(View):
 
 				return HttpResponse(respond_with_message("This job's name is " + n + " please start future messages to it with the name. Text '" + n + ", I'm finished' when you are done."))
 
-			if message == "quit":
-				# quit sending the user texts
+			if message == "offline":
+				# offline sending the user texts
 				clear_job_request_for_user(user)
 				user.MarkUnavailable()
 				return HttpResponse(respond_with_message("You are now marked as offline. Send 'crunchtime' to us again to start receiving jobs."))
 
-			return HttpResponse(respond_with_message("I didn't understand. Please reply with 'accept', 'decline' or 'quit'."))
+			return HttpResponse(respond_with_message("I didn't understand. Please reply with 'accept', 'decline' or 'offline'."))
 
 		# Handle help
 		if message == "help":
@@ -93,7 +93,7 @@ class TwilioView(View):
 
 			message = body[len(name):]
 
-			if message.lower() == "decline":
+			if "decline" in message.lower():
 				user.StopWorking()
 
 				j[0].status = 0
@@ -101,6 +101,13 @@ class TwilioView(View):
 				QueueJob(j[0])
 
 				return HttpResponse(respond_with_message("We have ended your involvement with that job. Expect another job coming soon."))
+
+
+			if "i'm finished" in message.lower():
+				user.StopWorking()
+				j[0].status = 2
+				j[0].save()
+				return HttpResponse(respond_with_message("Good work. We will send you another job as it becomes available."))
 
 			Communication.Log(j[0], message, j[1])
 

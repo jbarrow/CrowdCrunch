@@ -7,9 +7,10 @@ class Job(models.Model):
 	STATUS_CHOICES = (
 		(0, "Queued"),
 		(1, "Working"),
-		(2, "Accepted"),
-		(3, "Rejected"),
-		(4, "Error"),
+		(2, "Completed"),
+		(3, "Accepted"),
+		(4, "Rejected"),
+		(5, "Error"),
 	)
 	description = models.TextField()
 	status = models.IntegerField(choices = STATUS_CHOICES)
