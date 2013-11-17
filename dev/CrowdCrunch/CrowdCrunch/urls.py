@@ -4,6 +4,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 from cruncher.views import *
+from cruncher.twilio import TwilioView
 from django.views.generic import TemplateView
 
 from django.contrib.auth.decorators import login_required
@@ -19,6 +20,8 @@ urlpatterns = patterns('',
     url(r'^jobs/new/$', login_required(CreateJobView.as_view())),
 
     url(r'^profile/credit/$', login_required(CreditAccountView.as_view())),
+
+    url(r'^receive-message/$', TwilioView.as_view()),
 
     url(r'^admin/', include(admin.site.urls)),
 )
