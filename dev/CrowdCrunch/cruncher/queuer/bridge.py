@@ -20,9 +20,12 @@ def WorkerJobRunner(job):
 	while user == None:
 		try:
 			user = UserProfile.objects.filter(status=1)[0]
-		except:
+		except Exception as inst:
+			print "Job Failed..."
+			print type(inst)
+			print inst.args
+			print inst
 			time.sleep(1)
-			continue
 
 	QueueTextToUser(user.phone, "You have been assigned the job (reply with accept, decline, or stop): " + job.description)
 
