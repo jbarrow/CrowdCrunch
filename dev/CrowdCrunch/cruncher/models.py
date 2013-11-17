@@ -53,7 +53,7 @@ class Job(models.Model):
 			u = UserProfile.objects.get(phone_number=string)
 		except:
 			return False
-		return Job.Create(description, budget, u)
+		return cls.Create(description, budget, u)
 
 class Payment(models.Model):
 	number = models.CharField(max_length=255)
@@ -87,6 +87,19 @@ class UserProfile(models.Model):
 			return False
 		return o
 
+	@classmethod
+	def GetFromPhone(cls, phone):
+		o = False
+		try:
+			o = UserProfile.objects.get(phone=phone)
+		except:
+			return False
+		return o
+
+	def MarkAvailable(self):
+		self.status = 1
+		self.save()
+		
 	def AddCredits(self, credit_amount):
 		self.credits += credit_amount
 		self.save()
