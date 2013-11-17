@@ -12,6 +12,8 @@ from django.db.models import Q
 
 from django.http import HttpResponse
 
+from texting.texting import *
+
 class CreateJobView(View):
 	@method_decorator(csrf_protect)
 	def post(self, request, **kwargs):
@@ -108,6 +110,9 @@ class LandingView(TemplateView):
 			profile.credits = 5
 			profile.user_id = user
 			profile.save()
+
+			# send verify token
+			send_verify_token(phone)
 
 			user = authenticate(username=email, password=password)
 			login(request, user)

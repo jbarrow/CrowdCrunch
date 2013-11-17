@@ -76,6 +76,7 @@ class UserProfile(models.Model):
 	current_job = models.ForeignKey(Job, null=True, blank=True) 
 	user_id = models.ForeignKey(User)
 	phone_number = models.CharField(max_length=255)
+	phone_verified = models.BooleanField(default=False)
 
 	@classmethod
 	def Get(cls, user):
