@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load cruncher_extras %}
 
 {% block content %}
 	<div class="body">
@@ -6,17 +7,19 @@
 			<div class="col-md-4">
 				<ul class="nav nav-list nav-list-vivid">
 						<li class="nav-header">My Account - <strong>{{ stars }} Stars</strong></li>
-						<li class="active">
+						<li {% active request "/dashboard" %}>
 							<a href="/dashboard">
 								Dashboard
 							</a>
 						</li>
-						<li>
-							<a href="/current">
-								Current Job
-								<span class="badge pull-right">1</span>
+						{% if request.user|has_work %}
+						<li {% active request "/profile/current" %}>
+							<a href="/profile/current">
+								Current Work
+								<!-- <span class="badge pull-right">1</span> -->
 							</a>
 						</li>
+						{% endif %}
 						<li>
 							<a data-toggle="modal" data-target="#createJob">
 								Start a Job
@@ -27,7 +30,7 @@
 								Add Credits
 							</a>
 						</li>
-						<li>
+						<li {% active request "/profile" %}>
 							<a href="/profile">
 								My Profile
 							</a>
@@ -40,6 +43,7 @@
 					</ul>
 			</div>
 			<div class="col-md-8">
+				{% block dcontent %}
 				{% if unverified %}
 				<div class="dialog dialog-danger">
 					You still have to <a href="#" data-toggle="modal" data-target="#verifyPhone">verify your phone number</a> before you can start a job.
@@ -85,7 +89,7 @@
 					<ul class="nav nav-list">
 						{% for j in total_jobs %}
 						<li class="{% if j.status == 0 or j.status == 1 %}active{% endif %}">
-							<a href="#">
+							<a href="{% url "job-view" j.id %}">
 								{% if j.status == 0 or j.status == 1 %}Processing...{% endif %} - {{ j.created|date:"n/d"}} at {{ j.created|date:"h:i a" }} - {{ j.description }}...
 							</a>
 						</li>
@@ -94,6 +98,7 @@
 						{% endfor %}
 					</ul>
 				</div>
+				{% endblock %}
 			</div>
 		</div>
 	</div>

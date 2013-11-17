@@ -14,6 +14,37 @@ from django.http import HttpResponse
 
 from texting.texting import *
 
+from django.views.generic.detail import DetailView
+
+class LoggedInView(TemplateView):
+	def get_context_data(self, **kwargs):
+		context = super(LoggedInView, self).get_context_data(**kwargs)
+
+		if self.request.user.is_authenticated():
+			context['logged_in'] = True
+
+		return context
+
+class LoggedInDetailView(DetailView):
+	def get_context_data(self, **kwargs):
+		context = super(LoggedInDetailView, self).get_context_data(**kwargs)
+
+		if self.request.user.is_authenticated():
+			context['logged_in'] = True
+
+		return context
+
+class ViewJob(LoggedInDetailView):
+	template_name="cruncher/job_detail.html"
+
+	def get_queryset(self):
+		return Job.objects.filter(Q(owner=self.request.user) | Q(worker=self.request.user))
+
+class CurrentJobView(ViewJob):
+	def get_object(self, queryset=None):
+		return None
+
+
 class VerifyPhoneView(View):
 	@method_decorator(csrf_protect)
 	def post(self, request, **kwargs):
@@ -51,15 +82,6 @@ class CreditAccountView(View):
 			return redirect("/dashboard")
 		else:
 			return HttpResponse(status=500)
-
-class LoggedInView(TemplateView):
-	def get_context_data(self, **kwargs):
-		context = super(LoggedInView, self).get_context_data(**kwargs)
-
-		if self.request.user.is_authenticated():
-			context['logged_in'] = True
-
-		return context
 
 class DashboardView(LoggedInView):
 	template_name="dashboard.html" 
@@ -117,9 +139,21 @@ class LandingView(TemplateView):
 			phone = u''.join(c for c in request.POST['phone'] if '0' <= c <= '9')
 			phone_verify = u''.join(c for c in request.POST['phone_verify'] if '0' <= c <= '9')
 			password = request.POST['password']
-			if(email == u'' or phone == u'' or phone_verify == u'' or phone != phone_verify or password == u''):
+			first_name = request.POST['first_name']
+			last_name = request.POST['last_name']
+			if(
+				email == u'' or 
+				phone == u'' or 
+				phone_verify == u'' or 
+				first_name == u'' or 
+				last_name == u'' or 
+				phone != phone_verify or 
+				password == u''
+				):
 				return redirect("/?no-fill")
 			user = User.objects.create_user(email, email, password)
+			user.first_name = first_name
+			user.last_name = last_name
 			user.save()
 
 			# send verify token

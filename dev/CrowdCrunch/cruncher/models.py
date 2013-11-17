@@ -66,6 +66,9 @@ class Communication(models.Model):
 	text = models.TextField()
 	timestamp = models.DateTimeField(auto_now_add=True, null=True)
 
+	class Meta:
+		ordering = ['-timestamp']
+
 	@classmethod
 	def Log(job, text, sender):
 		c = Communication()
@@ -114,6 +117,16 @@ class UserProfile(models.Model):
 		except:
 			return False
 		return o
+
+	def GetCurrentJob(self):
+		return Job.objects.get(worker=self.request.user, status=1)
+
+	def HasWork(self):
+		try:
+			Job.objects.get(worker=self.request.user, status=1)
+		except:
+			return False
+		return True
 
 	def MarkAvailable(self):
 		self.status = 1
