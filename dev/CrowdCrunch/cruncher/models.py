@@ -55,6 +55,25 @@ class Job(models.Model):
 			return False
 		return cls.Create(description, budget, u)
 
+class Communication(models.Model):
+	SENDER_CHOICES = (
+		(0, "Server"),
+		(1, "Owner"),
+		(2, "Worker"),
+	)
+	job = models.ForeignKey(Job)
+	sender = models.IntegerField(choices=SENDER_CHOICES)
+	text = models.TextField()
+	timestamp = models.DateTimeField(auto_now_add=True, null=True)
+
+	@classmethod
+	def Log(job, text, sender):
+		c = Communication()
+		c.job = job
+		c.sender = sender
+		c.text = text
+		c.save()
+
 class Payment(models.Model):
 	number = models.CharField(max_length=255)
 	job = models.ForeignKey(Job)
