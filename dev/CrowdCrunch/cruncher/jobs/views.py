@@ -103,7 +103,7 @@ class TwilioView(View):
 				data = re.split("\W+", message.lower())
 				address = data[data.index("pay") + 1]
 				amount = data[data.index("pay") + 2]
-				if float(amount) <= (2/460) * j[0].budget:
+				if float(amount) <= (2/460) * j[0].cost:
 					make_transaction(address, amount)
 					return HttpResponse(respond_with_message("The payment has been successfully made."))
 				else:
@@ -175,7 +175,7 @@ class TwilioView(View):
 			m = b.match(body.lower())
 			if m != None:
 				the_budget = int(m.group(1))
-				
+
 			j = Job.Create(body, the_budget, user.user_id)
 
 			if (j):
