@@ -38,7 +38,7 @@
 		<tbody>
 			{% for c in object.communication_set.all %}
 			<tr>
-				<td>{{ c.sender }}</td>
+				<td>{{ c.get_sender_display }}</td>
 				<td>{{ c.text }}</td>
 				<td>{{ c.timestamp|date:"n/d"}} at {{ c.timestamp|date:"h:i a" }}</td>
 			</tr>

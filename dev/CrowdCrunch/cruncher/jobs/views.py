@@ -84,21 +84,20 @@ class TwilioView(View):
 		if user_has_name(user, name):
 			# They are replying to a job... Let's log that.
 			j = get_job_info(user, name)
-			jo = Job.objects.get(id=j)
 
 			message = body[len(name):]
 
 			if message.lower() == "decline":
 				user.StopWorking()
-				QueueJob(jo)
+				QueueJob(j[0])
 				return HttpResponse(respond_with_message("We have ended your involvement with that job. Expect another job coming soon."))
 
-			Communication.LogId(j[0], message, j[1])
+			Communication.Log(j[0], message, j[1])
 
-			other = jo.owner
+			other = j[0].owner
 			# if this is from the owner
 			if j[1] == 1:
-				other = jo.worker
+				other = j[0].worker
 
 			other_profile = UserProfile.Get(other)
 
