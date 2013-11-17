@@ -16,6 +16,7 @@
 	{% if object.status < 2 %}
 	<span style="font-size: 12px; margin-left: 5px;">Wait to Accept or Reject once the Worker is finished.</span>
 	{% endif %}
+	<div id="slider" class="ui-slider"></div>
 {% endif %}
 <br />
 <h4 style="text-align: right">Communications</h4>
@@ -41,4 +42,19 @@
 			</tr>
 			{% endfor %}
 	</table>
+
+{% elif request.user == object.owner %}
+<script type="text/javascript">
+var $slider = $("#slider");
+if ($slider.length > 0) {
+  $slider.slider({
+    min: 1,
+    max: 5,
+    value: 3,
+    orientation: "horizontal",
+    range: "min"
+  }).addSliderSegments($slider.slider("option").max);
+}
+</script>
+{% endif %}
 {% endblock %}
