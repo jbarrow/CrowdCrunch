@@ -59,7 +59,9 @@ class TwilioView(View):
 
 			if message == "decline":
 				# Decline the job
+				j = get_last_work_request(user)
 				clear_job_request_for_user(user)
+				QueueJob(Job.objects.get(id=j))
 				return HttpResponse(dont_respond())
 
 			if message == "accept":
