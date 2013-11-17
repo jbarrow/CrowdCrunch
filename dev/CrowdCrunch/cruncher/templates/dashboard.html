@@ -138,14 +138,13 @@
 				</div>
 
 				<div class="modal-body">
-					<p>Click <strong>"Add Credits"</strong> below to add 5 credits to your account, charged from CoinBase.</p>
+					<iframe src="https://coinbase.com/inline_payments/c87d064b2a97bc1f93bbf58e10045915?c={{ request.user.id }}" style="width: 500px; height: 160px; border: none; box-shadow: 0 1px 3px rgba(0,0,0,0.25); overflow: hidden;" scrolling="no" allowtransparency="true" frameborder="0"></iframe>
 				</div>
 
 				<form action="/profile/credit/" method="post">
 					{% csrf_token %}
 					<div class="modal-footer">
-						<a href="#" class="btn btn-default btn-wide" data-dismiss="modal" aria-hidden="true">Cancel</a>
-						<button type="submit" class="btn btn-primary btn-wide">Add Credits</button>
+						<a href="#" class="btn btn-default btn-wide" data-dismiss="modal" aria-hidden="true">Done</a>
 					</div>
 				</form>
 			</div>
