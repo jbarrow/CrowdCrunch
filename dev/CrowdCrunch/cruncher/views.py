@@ -11,6 +11,8 @@ from django.contrib.auth.models import check_password
 from cruncher.models import *
 from django.db.models import Q
 
+from cruncher.jobs.txtl import send_verify_token
+
 from django.http import HttpResponse
 
 from django.views.generic.detail import DetailView

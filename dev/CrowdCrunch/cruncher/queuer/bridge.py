@@ -3,6 +3,8 @@ from worker import conn
 
 from cruncher.jobs.txtl import send_text, send_verify_token
 
+from django.db.models import Q
+
 import time
 
 from cruncher.models import UserProfile
@@ -23,7 +25,7 @@ def WorkerJobRunner(job):
 			# Algorithm in Finding User
 			# print "Welcome"
 
-			tmp = UserProfile.objects.filter(status=1)
+			tmp = UserProfile.objects.filter(~Q(user_id_id=job.owner.id), status=1)
 
 			if job.cost > 0.0:
 				# print job.budget
